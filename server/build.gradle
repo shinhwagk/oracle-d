@@ -1,0 +1,37 @@
+group 'org.shinhwagk'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'scala'
+apply plugin: 'application'
+
+repositories {
+    mavenCentral()
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+sourceSets {
+    main {
+        scala {
+            srcDirs = ['src/main/scala']
+        }
+    }
+    test {
+        scala {
+            srcDirs = ['src/test/scala']
+        }
+    }
+}
+
+dependencies {
+    def akkaHttpVersion = '10.0.9'
+
+    compile 'org.scala-lang:scala-library:2.12.2'
+
+    compile name: 'ojdbc8'
+    compile group: 'com.typesafe.akka', name: 'akka-http_2.12', version: akkaHttpVersion
+    compile group: 'com.typesafe.akka', name: 'akka-http-spray-json_2.12', version: akkaHttpVersion
+
+    testCompile group: 'org.scalatest', name: 'scalatest_2.12', version: '3.0.3'
+}
