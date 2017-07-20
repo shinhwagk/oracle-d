@@ -3,8 +3,8 @@ package org.shinhwagk.od.common
 import scala.io.BufferedSource
 
 object Tools {
-  def readFile(path: String): BufferedSource = {
-    scala.io.Source.fromFile(path)
+  def readFile(path: String): Iterator[String] = {
+    scala.io.Source.fromResource(path).getLines().map(_.trim)
   }
 
   def readSqlFile(path: String): String = {

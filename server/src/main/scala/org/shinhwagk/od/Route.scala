@@ -1,8 +1,7 @@
-package org.shinhwagk.od.version
+package org.shinhwagk.od
 
 import org.shinhwagk.od.awr.single.{Route => AwrRoute}
 
 object Route {
-  val masterRoute = AwrRoute
-
+  val masterRoute = AwrRoute.route
 }
