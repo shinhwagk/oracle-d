@@ -1,0 +1,11 @@
+/node_modules
+/.vscode
+/hooks
+/resources
+/www
+config.xml
+ionic.config.json
+package.json
+tsconfig.json
+tslint.json
+.DS_Store
