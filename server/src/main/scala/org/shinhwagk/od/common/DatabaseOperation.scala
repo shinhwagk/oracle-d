@@ -1,8 +1,8 @@
 package org.shinhwagk.od.common
 
-import java.sql.{PreparedStatement, ResultSet}
+import java.sql.{CallableStatement, PreparedStatement, ResultSet}
 
-import oracle.jdbc.{OracleConnection, OraclePreparedStatement, OracleResultSet, OracleTypes}
+import oracle.jdbc._
 import oracle.jdbc.pool.OracleDataSource
 import spray.json.{JsArray, JsNumber, JsObject, JsString, JsValue}
 
@@ -12,16 +12,21 @@ import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
 object DatabaseOperation {
-  def sqlQuery[T](ci: ConnectInfo, sqlText: String, procResultSet: (ResultSet) => T, bindVariableOpt: Option[(PreparedStatement) => Unit] = None): Future[T] = Future {
+
+  import OracleJdbcConvert._
+
+  def sqlQuery[T](ci: ConnectInfo, sqlCode: String,
+                  procResultSet: (ResultSet) => T,
+                  bindVariableOpt: Option[(PreparedStatement) => Unit] = None): Future[T] = Future {
     var conn: OracleConnection = null
     var stmt: OraclePreparedStatement = null
     var rset: OracleResultSet = null
     try {
-      val ods = makeDataSource(ci)
-      conn = ods.getConnection().asInstanceOf[OracleConnection]
-      stmt = conn.prepareStatement(sqlText).asInstanceOf[OraclePreparedStatement]
+      val ods = makeDataSource()
+      conn = ods.getConnection()
+      stmt = conn.prepareStatement(sqlCode)
       bindVariableOpt.foreach(bv => bv(stmt))
-      rset = stmt.executeQuery().asInstanceOf[OracleResultSet]
+      rset = stmt.executeQuery()
       procResultSet(rset)
     } finally {
       if (rset != null) rset.close()
@@ -30,16 +35,46 @@ object DatabaseOperation {
     }
   }
 
-  def plsqlCall(): String = ???
+  def selectQuery[T](sqlCode: String, procResultSet: (ResultSet) => T,
+                     bindVariableOpt: Option[(PreparedStatement) => Unit] = None)(orclConn: OracleConnection): T = {
+    var stmt: OraclePreparedStatement = null
+    var rset: OracleResultSet = null
+    stmt = orclConn.prepareStatement(sqlCode)
+    bindVariableOpt.foreach(bv => bv(stmt))
+    rset = stmt.executeQuery()
+    val result = procResultSet(rset)
+    rset.close()
+    stmt.close()
+    result
+  }
 
-  def makeDataSource(ci: ConnectInfo): OracleDataSource = {
+  def plsqlCall[T](plsqlCode: String,
+                   callSet: (OracleCallableStatement) => Unit,
+                   callResult: (OracleCallableStatement) => T)(orclConn: OracleConnection): T = {
+    val ocs = orclConn.prepareCall(plsqlCode)
+    callSet(ocs)
+    ocs.execute()
+    val result: T = callResult(ocs)
+    ocs.close()
+    result
+  }
+
+  def usedOracleConnect[T](orclConnect: OracleConnection, f: OracleConnection => T,
+                           afterClose: Boolean = false): T = {
+    val result = f(orclConnect)
+    if (afterClose) orclConnect.close()
+    result
+  }
+
+  def makeDataSource(driverType: String, serverName: String, portNumber: Int, serviceName: String,
+                     user: String, password: String): OracleDataSource = {
     val ods = new OracleDataSource()
-    ods.setDriverType("thin");
-    ods.setServerName(ci.ip)
-    ods.setPortNumber(ci.port)
-    ods.setServiceName(ci.service)
-    ods.setUser(ci.username)
-    ods.setPassword(ci.password)
+    ods.setDriverType(driverType);
+    ods.setServerName(serverName)
+    ods.setPortNumber(portNumber)
+    ods.setServiceName(serviceName)
+    ods.setUser(user)
+    ods.setPassword(password)
     ods
   }
 
