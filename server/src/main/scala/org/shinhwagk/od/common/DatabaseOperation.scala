@@ -15,26 +15,6 @@ object DatabaseOperation {
 
   import OracleJdbcConvert._
 
-  def sqlQuery[T](ci: ConnectInfo, sqlCode: String,
-                  procResultSet: (ResultSet) => T,
-                  bindVariableOpt: Option[(PreparedStatement) => Unit] = None): Future[T] = Future {
-    var conn: OracleConnection = null
-    var stmt: OraclePreparedStatement = null
-    var rset: OracleResultSet = null
-    try {
-      val ods = makeDataSource()
-      conn = ods.getConnection()
-      stmt = conn.prepareStatement(sqlCode)
-      bindVariableOpt.foreach(bv => bv(stmt))
-      rset = stmt.executeQuery()
-      procResultSet(rset)
-    } finally {
-      if (rset != null) rset.close()
-      if (stmt != null) stmt.close()
-      if (conn != null) conn.close()
-    }
-  }
-
   def selectQuery[T](sqlCode: String, procResultSet: (ResultSet) => T,
                      bindVariableOpt: Option[(PreparedStatement) => Unit] = None)(orclConn: OracleConnection): T = {
     var stmt: OraclePreparedStatement = null
@@ -51,7 +31,7 @@ object DatabaseOperation {
   def plsqlCall[T](plsqlCode: String,
                    callSet: (OracleCallableStatement) => Unit,
                    callResult: (OracleCallableStatement) => T)(orclConn: OracleConnection): T = {
-    val ocs = orclConn.prepareCall(plsqlCode)
+    val ocs: OracleCallableStatement = orclConn.prepareCall(plsqlCode)
     callSet(ocs)
     ocs.execute()
     val result: T = callResult(ocs)
@@ -60,8 +40,8 @@ object DatabaseOperation {
   }
 
   def usedOracleConnect[T](orclConnect: OracleConnection, f: OracleConnection => T,
-                           afterClose: Boolean = false): T = {
-    val result = f(orclConnect)
+                                                  afterClose: Boolean = false): Future[T] = Future {
+    val result: T = f(orclConnect)
     if (afterClose) orclConnect.close()
     result
   }

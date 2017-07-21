@@ -1,1 +1,1 @@
-SELECT * FROM v$version WHERE banner LIKE 'Oracle%';
+BEGIN ? := DBMS_DB_VERSION.VERSION; END;

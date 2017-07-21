@@ -1,8 +1,8 @@
 package org.shinhwagk.od.common
 
-import java.sql.{Connection, PreparedStatement, ResultSet}
+import java.sql.{CallableStatement, Connection, PreparedStatement, ResultSet}
 
-import oracle.jdbc.{OracleConnection, OraclePreparedStatement, OracleResultSet}
+import oracle.jdbc.{OracleCallableStatement, OracleConnection, OraclePreparedStatement, OracleResultSet}
 
 object OracleJdbcConvert {
 
@@ -16,5 +16,9 @@ object OracleJdbcConvert {
 
   implicit def resultSetToOracleResultSet(r: ResultSet): OracleResultSet = {
     r.asInstanceOf[OracleResultSet]
+  }
+
+  implicit def callableStatementToOracleCallableStatement(c: CallableStatement): OracleCallableStatement = {
+    c.asInstanceOf[OracleCallableStatement]
   }
 }

@@ -1,4 +1,5 @@
 select to_char(s.startup_time,'dd Mon "at" HH24:mi:ss')  instart_fmt
+     , di.dbid                                           dbid
      , di.instance_name                                  inst_name
      , di.db_name                                        db_name
      , s.snap_id                                         snap_id

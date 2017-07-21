@@ -13,7 +13,7 @@ object Route {
         path("snapshots") {
           get {
             parameters('name.as[String], 'days.as[Int]) { (name, days) =>
-              onComplete(AwrSnapshotOperation.getSnapshots(name, days)) {
+              onComplete(AwrSingleOperation.getSnapshots(name, days)) {
                 case Success(json) =>
                   import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
                   complete(json)
@@ -25,7 +25,7 @@ object Route {
           get {
             parameters('name.as[String], 'dbid.as[Long], 'instnum.as[Int], 'bid.as[Int], 'eid.as[Int], 'mode.as[String]) {
               (name, dbid, instnum, bid, eid, mode) =>
-                onComplete(AwrReportOperation.generateAwr(name, dbid, instnum, bid, eid, mode)) {
+                onComplete(AwrSingleOperation.generateAwr(name, dbid, instnum, bid, eid, mode)) {
                   case Success(report) =>
                     if (mode.toLowerCase == "html") {
                       complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, report))
