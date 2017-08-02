@@ -1,5 +1,6 @@
 package org.shinhwagk.od.common
 
+import java.math.BigDecimal
 import java.sql.{CallableStatement, PreparedStatement, ResultSet}
 
 import oracle.jdbc._
@@ -40,7 +41,7 @@ object DatabaseOperation {
   }
 
   def usedOracleConnect[T](orclConnect: OracleConnection, f: OracleConnection => T,
-                                                  afterClose: Boolean = false): Future[T] = Future {
+                           afterClose: Boolean = false): Future[T] = Future {
     val result: T = f(orclConnect)
     if (afterClose) orclConnect.close()
     result

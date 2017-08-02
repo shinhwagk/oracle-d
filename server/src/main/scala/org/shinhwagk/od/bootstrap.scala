@@ -17,7 +17,7 @@ object Bootstrap extends App {
 
   implicit val executionContext = system.dispatcher
 
-  val bindingFuture = Http().bindAndHandle(Route.masterRoute, "localhost", 9001)
+  val bindingFuture = Http().bindAndHandle(Route.masterRoute, "0.0.0.0", 9003)
 
   println(s"Server online at http://localhost:8080/\nPress RETURN to stop...")
   StdIn.readLine()

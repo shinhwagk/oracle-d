@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>TopSql</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-item>
+      <ion-label>dbalias</ion-label>
+      <ion-select>
+        <ion-option [value]="name" *ngFor="let name of getServers()">{{name}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Top N</ion-label>
+      <ion-select>
+        <ion-option [value]="num" *ngFor="let num of [5,10,15,20,25,30]; let i=index">{{num}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <button *ngFor="let type of tops" ion-button block>{{type}}</button>
+    </ion-item>
+  </ion-list>
+</ion-content>

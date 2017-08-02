@@ -1,0 +1,72 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{title}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header style="color:violet; background-color: black;">
+      Instance Info
+    </ion-card-header>
+    <ion-card-content style="background-color: black;">
+      <table style="width:100%">
+        <tr>
+          <td style="color: cyan;">Inst</td>
+          <td style="color: cyan;">DBTime%CW</td>
+          <td style="color: cyan;">DBCpu-%DBT</td>
+          <td style="color: cyan;">SQL-Xela%DBT</td>
+          <td style="color: cyan;">SQL-Pela%DBT</td>
+          <td style="color: cyan;">SQL-HPela%DBT</td>
+        </tr>
+        <tr *ngFor="let instance of instanceInfos">
+          <td style="color: green;">{{instance['Inst']}}</td>
+          <td style="color: green;">{{instance['DBTime%CW']}}</td>
+          <td style="color: green;">{{instance['DBCpu-%DBT']}}</td>
+          <td style="color: green;">{{instance['SQL-Xela%DBT']}}</td>
+          <td style="color: green;">{{instance['SQL-Pela%DBT']}}</td>
+          <td style="color: green;">{{instance['SQL-HPela%DBT']}}</td>
+        </tr>
+      </table>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header style="color:blue; background-color: black;">
+      Active Session (no sys/system)
+    </ion-card-header>
+    <ion-card-content style="background-color: black;">
+      <table style="background-color: black;">
+        <tr style="background-color: black;">
+          <th style="color: cyan; text-align:left; width:5%">INST</th>
+          <th style="color: cyan; text-align:left; width:5%">SID</th>
+          <td style="color: cyan; text-align:left; width:5%">SERIAL#</td>
+          <td style="color: cyan; text-align:left; width:100px">USERNAME</td>
+          <td style="color: cyan; text-align:left; width:200px">PROGRAM</td>
+          <td style="color: cyan; text-align:left; width:200px">EVENT</td>
+          <td style="color: cyan; text-align:left; width:100px">DURATION</td>
+          <td style="color: cyan; text-align:left; width:20%">SQLID_CHN</td>
+          <td style="color: cyan; text-align:left; width:10%">AVELA</td>
+          <td style="color: cyan; text-align:left; width:10%">BLKIS</td>
+        </tr>
+        <tr *ngFor="let session of sessionInfos">
+          <td style="color: green;">{{session['INST_ID']}}</td>
+          <td style="color: green;">{{session['SID']}}</td>
+          <td style="color: green;">{{session['SERIAL#']}}</td>
+          <td style="color: green;">{{session['USERNAME']}}</td>
+          <td style="color: green;">{{session['PROGRAM']}}</td>
+          <td style="color: green;">{{session['EVENT']}}</td>
+          <td style="color: green;">{{session['DURATION']}}</td>
+          <td style="color: green;">{{session['SQLID_CHN']}}</td>
+          <td style="color: green;">{{session['AVELA']}}</td>
+          <td style="color: green;">{{session['BLKIS']}}</td>
+        </tr>
+      </table>
+    </ion-card-content>
+  </ion-card>
+
+
+</ion-content>

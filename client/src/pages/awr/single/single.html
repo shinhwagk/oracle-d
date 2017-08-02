@@ -16,18 +16,35 @@
       </ion-select>
     </ion-item>
     <ion-item>
-      <ion-label>list snapshots days</ion-label>
-      <ion-input type="number" #days></ion-input>
+      <ion-label>Days</ion-label>
+      <ion-range min="1" max="30" step="1" snaps="true" #days>
+        <ion-label range-left>1</ion-label>
+        <ion-label range-right>30</ion-label>
+      </ion-range>
     </ion-item>
     <ion-item>
       <button ion-button block (click)="displaySnapshots(server.value, days.value)">List Snapshots</button>
     </ion-item>
   </ion-list>
-  <ion-list>
-    <ion-item *ngIf="ss.length >= 1">
-      <ion-select>
-        <ion-option *ngFor="let name of ss">{{name.SNAP_ID}}</ion-option>
+  <ion-list *ngIf="a">
+    <ion-item>
+      <ion-label>Start SNAP_ID</ion-label>
+      <ion-select #startid>
+        <ion-option *ngFor="let name of ss" [value]="name.SNAP_ID">{{name.SNAPDAT}} - {{name.SNAP_ID}}</ion-option>
       </ion-select>
     </ion-item>
+    <ion-item>
+      <ion-label>End SNAP_ID</ion-label>
+      <ion-select #endid>
+        <ion-option *ngFor="let name of ss" [value]="name.SNAP_ID">{{name.SNAPDAT}} {{name.SNAP_ID}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <button ion-button (click)="reportAwr(startid.value, endid.value)">Repport AWR</button>
+      <button ion-button>send mails</button>
+    </ion-item>
   </ion-list>
+  <ion-item>
+    <iframe class="e2e-iframe-trusted-src" width="100%" height="100%" src="http://10.65.103.15:9001/v1/awr/single/report?name=yali&dbid=2630929514&instnum=1&bid=41177&eid=41178&mode=html"></iframe>
+  </ion-item>
 </ion-content>

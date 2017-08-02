@@ -25,8 +25,11 @@ object Route {
           get {
             parameters('name.as[String], 'dbid.as[Long], 'instnum.as[Int], 'bid.as[Int], 'eid.as[Int], 'mode.as[String]) {
               (name, dbid, instnum, bid, eid, mode) =>
+                val start = System.currentTimeMillis()
+                println("start report awr")
                 onComplete(AwrSingleOperation.generateAwr(name, dbid, instnum, bid, eid, mode)) {
                   case Success(report) =>
+                    println(s"end report awr ${System.currentTimeMillis() - start}")
                     if (mode.toLowerCase == "html") {
                       complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, report))
                     } else {

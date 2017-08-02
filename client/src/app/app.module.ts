@@ -11,6 +11,8 @@ import { AwrSinglePage } from '../pages/awr/single/single';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { TopSqlPage } from '../pages/topsql/topsql';
+import { KeyPerformance } from '../pages/keyperformance/keyperformance';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,9 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     HomePage,
     ListPage,
     AwrPage,
-    AwrSinglePage
+    AwrSinglePage,
+    TopSqlPage,
+    KeyPerformance
   ],
   imports: [
     BrowserModule,
@@ -31,7 +35,9 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     HomePage,
     ListPage,
     AwrPage,
-    AwrSinglePage
+    AwrSinglePage,
+    TopSqlPage,
+    KeyPerformance
   ],
   providers: [
     StatusBar,

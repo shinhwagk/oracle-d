@@ -9,3 +9,8 @@ package.json
 tsconfig.json
 tslint.json
 .DS_Store
+
+#gk
+/platforms
+/plugins
+package-lock.json
